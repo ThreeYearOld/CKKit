@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '8.0'
+
+target 'CKKit_Example' do
+  pod 'CKKit', :path => '../'
+
+  target 'CKKit_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
