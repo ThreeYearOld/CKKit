@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   # 名称
   s.name             = 'CKKit'
   # 版本
-  s.version          = '0.0.2'
+  s.version          = '0.0.3'
   # 摘要
   s.summary          = 'A short description of CKKit.'
 
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   # 许可证
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   # 作者
-  s.author           = { 'ThreeYearOld' => '13035155560@163.com' }
+  s.author           = { 'ThreeYearOld' => 'ThreeYearOld' }
   # 仓库源
   s.source           = { :git => 'https://github.com/ThreeYearOld/CKKit.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
