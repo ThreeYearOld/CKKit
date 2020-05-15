@@ -22,14 +22,14 @@ Pod::Spec.new do |s|
   # 详情
   s.description      = 'CKKit 组件化一些常用的工具，便于快速生成界面！'
   # 仓库主页
-  s.homepage         = 'https://github.com/13035155560@163.com/CKKit'
+  s.homepage         = 'https://github.com/ThreeYearOld/CKKit'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   # 许可证
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   # 作者
-  s.author           = { '13035155560@163.com' => '13035155560@163.com' }
+  s.author           = { 'ThreeYearOld' => '13035155560@163.com' }
   # 仓库源
-  s.source           = { :git => 'https://github.com/13035155560@163.com/CKKit.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/ThreeYearOld/CKKit.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
