@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   # 名称
   s.name             = 'CKKit'
   # 版本
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   # 摘要
   s.summary          = 'A short description of CKKit.'
 

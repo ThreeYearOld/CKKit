@@ -62,7 +62,7 @@
 		</data>
 		<key>Headers/CKInputView.m</key>
 		<data>
-		LQCKvY/2vAfBgXEFHU7I+6u6DR4=
+		z6yXa0OyZXyxdG3PfHrMVZNSedA=
 		</data>
 		<key>Headers/CKKit.h</key>
 		<data>
@@ -171,26 +171,6 @@
 		<key>Modules/module.modulemap</key>
 		<data>
 		CzAr9aV+BIaoDbnL6VwCk2XSDrw=
-		</data>
-		<key>Sources.bundle/images/apnumberpad_backspace_icon.png</key>
-		<data>
-		3CGHZbwApz6bD8MeYH3/fWvr94A=
-		</data>
-		<key>Sources.bundle/images/apnumberpad_backspace_icon@2x.png</key>
-		<data>
-		vFjNuslzsfe8Lf+ajAaInUSRYYI=
-		</data>
-		<key>Sources.bundle/images/icon_changeTable_off.png</key>
-		<data>
-		xvh37WKIIx3SqR6nkjcnkoLcEV4=
-		</data>
-		<key>Sources.bundle/images/icon_changeTable_on.png</key>
-		<data>
-		TJKnRUTJ53UVuPwqQG7o8hYyv5Y=
-		</data>
-		<key>Sources.bundle/images/sc_03.png</key>
-		<data>
-		Gk6OakIihb6HGwBKJITJKfSjq9U=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -353,11 +333,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			LQCKvY/2vAfBgXEFHU7I+6u6DR4=
+			z6yXa0OyZXyxdG3PfHrMVZNSedA=
 			</data>
 			<key>hash2</key>
 			<data>
-			tiRQ8pJVwjyf3+3LrJauIOxUVxRd+6nuuypo6pdyask=
+			6dUEF7vXyUFQNw05fw9EyUuPYMJs4sW8NL44SS0WJ38=
 			</data>
 		</dict>
 		<key>Headers/CKKit.h</key>
@@ -644,61 +624,6 @@
 			<key>hash2</key>
 			<data>
 			0X/blnnWmMOiomyEO24OybKWkbfsviaviHKJRYttjWY=
-			</data>
-		</dict>
-		<key>Sources.bundle/images/apnumberpad_backspace_icon.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			3CGHZbwApz6bD8MeYH3/fWvr94A=
-			</data>
-			<key>hash2</key>
-			<data>
-			j8HEnhVAguk8aslkRCgJ671aQAc9537NE7sfJrbOjDU=
-			</data>
-		</dict>
-		<key>Sources.bundle/images/apnumberpad_backspace_icon@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			vFjNuslzsfe8Lf+ajAaInUSRYYI=
-			</data>
-			<key>hash2</key>
-			<data>
-			bpnLOsk6UcmppsTEH2MX+7QaoqX5I0qrmd6sVRZDqBY=
-			</data>
-		</dict>
-		<key>Sources.bundle/images/icon_changeTable_off.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			xvh37WKIIx3SqR6nkjcnkoLcEV4=
-			</data>
-			<key>hash2</key>
-			<data>
-			uxbv+55AA+vNtjr+IZj6g5h2/txgmKQuNPpaESQ6+Sw=
-			</data>
-		</dict>
-		<key>Sources.bundle/images/icon_changeTable_on.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			TJKnRUTJ53UVuPwqQG7o8hYyv5Y=
-			</data>
-			<key>hash2</key>
-			<data>
-			TPnYt+GSHTQEmooKT3SxseyzcwqQWtpmPCYgxKJYOP8=
-			</data>
-		</dict>
-		<key>Sources.bundle/images/sc_03.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			Gk6OakIihb6HGwBKJITJKfSjq9U=
-			</data>
-			<key>hash2</key>
-			<data>
-			spglbA5keBfQLJ8d25n9v2hW+Kqxd7miuIB0G+6phy8=
 			</data>
 		</dict>
 	</dict>

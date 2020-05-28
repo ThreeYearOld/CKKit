@@ -155,10 +155,7 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
 /** 更新输入框类型 */
 - (void)updateInputStyle:(CKInputViewType)style {
     _currentType = style;
-    if (_inputView) {
-        [_inputView removeFromSuperview];
-    }
-    __block UIView *view = nil;
+    UIView *view = nil;
     switch (style) {
         case CKInputViewTypeForLabel:{
             if (!_borderLabel.superview) {
@@ -198,10 +195,18 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         default:
             break;
     }
+    if (view == _inputView) return;
+    if (_inputView) {
+        [_inputView removeFromSuperview];
+    }
     if (view) {
         [view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.right.bottom.equalTo(self);
-            make.left.equalTo(self.titleLabel.mas_right).offset(8);
+            if (_titleWidth == 0) {
+                make.left.top.bottom.right.equalTo(self);
+            }else {
+                make.top.right.bottom.equalTo(self);
+                make.left.equalTo(self.titleLabel.mas_right).offset(8);
+            }
         }];
     }
     // 弱指针引用当前输入框
