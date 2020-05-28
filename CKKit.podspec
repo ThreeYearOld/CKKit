@@ -10,9 +10,9 @@ Pod::Spec.new do |s|
   # 名称
   s.name             = 'CKKit'
   # 版本
-  s.version          = '0.0.5'
+  s.version          = '0.0.6'
   # 摘要
-  s.summary          = 'A short description of CKKit.'
+  s.summary          = '组件化，经常用到的输入框类型的控件，造一个好用的轮子，方便复用，以及快速开发。'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
   # 详情
-  s.description      = 'CKKit 组件化一些常用的工具，便于快速生成界面！'
+  s.description      = 'CKKit 组件化一些常用的工具，便于快速生成界面！常用的inputView控件,支持数字键盘、文字、时间选择、按钮，spinnerView控件，下拉选择等等'
   # 仓库主页
   s.homepage         = 'https://github.com/ThreeYearOld/CKKit'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
