@@ -1,5 +1,5 @@
 PODS:
-  - CKKit (0.0.4):
+  - CKKit (0.0.5):
     - Masonry
   - Masonry (1.1.0)
 
@@ -15,9 +15,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  CKKit: b1da95228a37ec823b818ca258b70029ee27ed9c
+  CKKit: 549913a3f6e91407b2b2ee7b0b3cad6aa9f27989
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
 PODFILE CHECKSUM: 87dc28154649c8b4ebe2b2b6d9782bf87b146532
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.2
