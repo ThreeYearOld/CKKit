@@ -23,7 +23,9 @@ typedef NS_ENUM(NSInteger, CKInputViewType) {
     /** 输入框是带边框和向下箭头的textField */
     CKInputViewTypeForDownTF,
     /** 输入框为按钮 */
-    CKInputViewTypeForButton
+    CKInputViewTypeForButton,
+    /** 输入框为带边框的textView */
+    CKInputViewTypeForTextView
 };
 
 typedef NS_ENUM(NSInteger, CKKeyboardType) {
@@ -51,13 +53,16 @@ typedef NS_ENUM(NSInteger, CKInputViewDeleteType) {
 /** 输入框当前的值 */
 @property (nonatomic, copy) NSString * text;
 
+/** title */
+@property (nonatomic, copy) NSString * title;
+
 /** tag标记 */
 @property (nonatomic, assign) NSInteger indexTag;
 
 /** 获取当前输入框的对象 */
 @property (nonatomic, weak, readonly) id inputObject;
 
-/** 获取当前的textField是否获取焦点 */
+/** 当前的输入框是否获取焦点 */
 @property (nonatomic, assign, readonly) BOOL getFirstResponse;
 
 /**
@@ -116,11 +121,14 @@ typedef NS_ENUM(NSInteger, CKInputViewDeleteType) {
 /** #扩展功能的属性 - 可不设置# 当输入框是TextField时，可以设置键盘的类型 */
 @property (nonatomic, assign) CKKeyboardType keyboardType;
 
+/** #扩展功能的属性 - 可不设置# 当输入框是TextField且键盘类型为时间时，是否精确到秒 */
+@property (nonatomic, assign) BOOL isNeedSec;
+
 /** #扩展功能的属性 - 可不设置# 当输入框带有图标时，设置图标 */
 @property (nonatomic, copy) NSString * narrowImgName;
 
 /** #扩展功能的属性 - 可不设置# 当输入框是TextField时，设置textField的代理 */
-@property (nonatomic, weak) id <UITextFieldDelegate> myDelegate;
+@property (nonatomic, weak) id myDelegate;
 
 /** #扩展功能的属性 - 可不设置# 当输入框是TextField且为数字键盘时，输入类型是否为手机、电话 */
 @property (nonatomic, assign) BOOL isInputPhone;

@@ -40,6 +40,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
 /** 带向下箭头和边框的输入框 */
 @property (nonatomic, strong) CKNarrowTextFieldView * narrowTF;
 
+/** 带边框的textView */
+@property (nonatomic, strong) UITextView * borderTextView;
+
 /** 删除btn */
 @property (nonatomic, strong) UIButton * deleteBtn;
 
@@ -78,38 +81,45 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     __block UIView *view = nil;
     switch (type) {
         case CKInputViewTypeForLabel:{
-            if (!_borderLabel.superview) {
+            if (!_borderLabel || !_borderLabel.superview) {
                 [self addSubview:self.borderLabel];
             }
             view = self.borderLabel;
             break;
         }
         case CKInputViewTypeForDownBorderLabel:{
-            if (!_downwardView.superview) {
+            if (!_downwardView || !_downwardView.superview) {
                [self addSubview:self.downwardView];
             }
             view = self.downwardView;
             break;
         }
         case CKInputViewTypeForTextField:{
-            if (!_borderTF.superview) {
+            if (!_borderTF || !_borderTF.superview) {
                 [self addSubview:self.borderTF];
             }
             view = self.borderTF;
             break;
         }
         case CKInputViewTypeForDownTF:{
-            if (!_narrowTF.superview) {
+            if (!_narrowTF || !_narrowTF.superview) {
                 [self addSubview:self.narrowTF];
             }
             view = self.narrowTF;
             break;
         }
         case CKInputViewTypeForButton:{
-            if (!_selectBtn.superview) {
+            if (!_selectBtn || !_selectBtn.superview) {
                 [self addSubview:self.selectBtn];
             }
             view = self.selectBtn;
+            break;
+        }
+        case CKInputViewTypeForTextView:{
+            if (!_borderTextView || !_borderTextView.superview) {
+                [self addSubview:self.borderTextView];
+            }
+            view = self.borderTextView;
             break;
         }
         default:
@@ -123,23 +133,34 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         [self.titleLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
         [self.titleLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.bottom.equalTo(self);
+            if (view == self.borderTextView) {
+                make.left.top.equalTo(self);
+                make.height.mas_equalTo(30);
+            }else {
+                make.left.top.bottom.equalTo(self);
+            }
         }];
         [view mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.right.bottom.equalTo(self);
             make.left.equalTo(self.titleLabel.mas_right).offset(8);
+            if (view == self.borderTextView) {
+                make.height.mas_greaterThanOrEqualTo(30);
+            }
         }];
     }
     // 弱指针引用当前输入框
     self.inputView = view;
-    if (type == CKInputViewTypeForTextField || type == CKInputViewTypeForDownTF) {
+    if (type == CKInputViewTypeForTextField || type == CKInputViewTypeForDownTF || type == CKInputViewTypeForTextView) {
         // 在系统键盘上添加确认/取消按钮 - 仅仅是input是textField时，添加
-        CKToolBar *toolbar = [self createToolBar];
+        UIToolbar *toolbar = [[[NSBundle mainBundle] loadNibNamed:@"HNToolBar" owner:self options:nil] firstObject];
         if (_borderTF) {
             _borderTF.inputAccessoryView = toolbar;
         }
         if (_narrowTF) {
             _narrowTF.textField.inputAccessoryView = toolbar;
+        }
+        if (_borderTextView) {
+            _borderTextView.inputAccessoryView = toolbar;
         }
     }else {
         if (type == CKInputViewTypeForButton) return;
@@ -158,38 +179,45 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     UIView *view = nil;
     switch (style) {
         case CKInputViewTypeForLabel:{
-            if (!_borderLabel.superview) {
+            if (!_borderLabel || !_borderLabel.superview) {
                 [self addSubview:self.borderLabel];
             }
             view = self.borderLabel;
             break;
         }
         case CKInputViewTypeForDownBorderLabel:{
-            if (!_downwardView.superview) {
+            if (!_downwardView || !_downwardView.superview) {
                [self addSubview:self.downwardView];
             }
             view = self.downwardView;
             break;
         }
         case CKInputViewTypeForTextField:{
-            if (!_borderTF.superview) {
+            if (!_borderTF || !_borderTF.superview) {
                 [self addSubview:self.borderTF];
             }
             view = self.borderTF;
             break;
         }
         case CKInputViewTypeForDownTF:{
-            if (!_narrowTF.superview) {
+            if (!_narrowTF || !_narrowTF.superview) {
                 [self addSubview:self.narrowTF];
             }
             view = self.narrowTF;
             break;
         }
         case CKInputViewTypeForButton:{
-            if (!_selectBtn.superview) {
+            if (!_selectBtn || !_selectBtn.superview) {
                 [self addSubview:self.selectBtn];
             }
             view = self.selectBtn;
+            break;
+        }
+        case CKInputViewTypeForTextView:{
+            if (!_borderTextView || !_borderTextView.superview) {
+                [self addSubview:self.borderTextView];
+            }
+            view = self.borderTextView;
             break;
         }
         default:
@@ -211,14 +239,19 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     }
     // 弱指针引用当前输入框
     self.inputView = view;
+    // 设置当前文字的对齐方式
+    self.textAlignment = _textAlignment;
     if (style == CKInputViewTypeForTextField || style == CKInputViewTypeForDownTF) {
         // 在系统键盘上添加确认/取消按钮 - 仅仅是input是textField时，添加
-        CKToolBar *toolbar = [self createToolBar];
+        UIToolbar *toolbar = [[[NSBundle mainBundle] loadNibNamed:@"HNToolBar" owner:self options:nil] firstObject];
         if (_borderTF) {
             _borderTF.inputAccessoryView = toolbar;
         }
         if (_narrowTF) {
             _narrowTF.textField.inputAccessoryView = toolbar;
+        }
+        if (_borderTextView) {
+            _borderTextView.inputAccessoryView = toolbar;
         }
     }else {
         if (style == CKInputViewTypeForButton) return;
@@ -228,6 +261,10 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
                 weakSelf.inputViewTapEventBlock(weakSelf.inputView, weakSelf.indexTag);
             }
         }];
+    }
+    // 同步字体大小
+    if (_textBoldFont > 0) {
+        [self setTextBoldFont:_textBoldFont];
     }
 }
 
@@ -271,6 +308,13 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
             }
             break;
         }
+        case CKInputViewTypeForTextView:{
+            if (isShow) {
+                _borderTextView.layer.borderColor = color == [UIColor clearColor] ? [UIColor ck_colorWithHexString:@"#d2d5e0"].CGColor : color.CGColor;
+                _borderTextView.layer.borderWidth = 1.0/[UIScreen mainScreen].scale;
+            }
+            break;
+        }
         default:
             break;
     }
@@ -288,6 +332,8 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
                 _borderTF.keyboardType = UIKeyboardTypeDefault;
             }else if (_currentType == CKInputViewTypeForDownTF && _narrowTF) {
                 _narrowTF.textField.keyboardType = UIKeyboardTypeDefault;
+            }else if (_currentType == CKInputViewTypeForTextView && _borderTextView) {
+                _borderTextView.keyboardType = UIKeyboardTypeDefault;
             }
             break;
         }
@@ -296,6 +342,8 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
                 _borderTF.keyboardType = UIKeyboardTypeURL;
             }else if (_currentType == CKInputViewTypeForDownTF && _narrowTF) {
                 _narrowTF.textField.keyboardType = UIKeyboardTypeURL;
+            }else if (_currentType == CKInputViewTypeForTextView && _borderTextView) {
+                _borderTextView.keyboardType = UIKeyboardTypeURL;
             }
             break;
         }
@@ -316,6 +364,13 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
                     numberPad.leftFunctionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
                     numberPad;
                 });
+            }else if (_currentType == CKInputViewTypeForTextView && _borderTextView) {
+                _borderTextView.inputView = ({
+                    APNumberPad *numberPad = [APNumberPad numberPadWithDelegate:self];
+                    [numberPad.leftFunctionButton setTitle:@"." forState:UIControlStateNormal];
+                    numberPad.leftFunctionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+                    numberPad;
+                });
             }
             break;
         }
@@ -324,6 +379,8 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
                 _borderTF.inputView = self.datePicker;
             }else if (_currentType == CKInputViewTypeForDownTF && _narrowTF) {
                 _narrowTF.textField.inputView = self.datePicker;
+            }else if (_currentType == CKInputViewTypeForTextView && _borderTextView) {
+                _borderTextView.inputView = self.datePicker;
             }
             break;
         }
@@ -417,6 +474,10 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
             _narrowTF.isHidden = isShowOnly;
             break;
         }
+        case CKInputViewTypeForTextView:{
+            _borderTextView.layer.borderColor = isShowOnly ? [UIColor clearColor].CGColor : [UIColor ck_colorWithHexString:@"#d2d5e0"].CGColor;
+            break;
+        }
         default:
             break;
     }
@@ -440,6 +501,10 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         }
         case CKInputViewTypeForDownTF:{
             _narrowTF.textField.textAlignment = textAlignment;
+            break;
+        }
+        case CKInputViewTypeForTextView:{
+            _borderTextView.textAlignment = textAlignment;
             break;
         }
         default:
@@ -483,11 +548,14 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         _borderTF.delegate = myDelegate;
     }else if (_currentType == CKInputViewTypeForDownTF && _narrowTF) {
         _narrowTF.textField.delegate = myDelegate;
+    }else if (_currentType == CKInputViewTypeForTextView && _borderTextView) {
+        _borderTextView.delegate = myDelegate;
     }
 }
 
 #pragma mark - 设置输入框字体加粗的字体
 - (void)setTextBoldFont:(CGFloat)textBoldFont {
+    _textBoldFont = textBoldFont;
     // 标题不需要加粗
     self.titleLabel.font = [UIFont systemFontOfSize:textBoldFont];
     switch (_currentType) {
@@ -503,6 +571,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         case CKInputViewTypeForDownTF:
             _narrowTF.textField.font = [UIFont boldSystemFontOfSize:textBoldFont];
             break;
+        case CKInputViewTypeForTextView:
+            _borderTextView.font = [UIFont boldSystemFontOfSize:textBoldFont];
+        break;
         default:
             break;
     }
@@ -526,6 +597,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         case CKInputViewTypeForButton:
             [_selectBtn setBackgroundColor:inputBgColor];
             break;
+        case CKInputViewTypeForTextView:
+            _borderTextView.backgroundColor = inputBgColor;
+            break;
         default:
             break;
     }
@@ -546,6 +620,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         case CKInputViewTypeForDownTF:
             _narrowTF.textField.textColor = textColor;
             break;
+        case CKInputViewTypeForTextView:
+            _borderTextView.textColor = textColor;
+            break;
         default:
             break;
     }
@@ -564,6 +641,8 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
             return _narrowTF;
         case CKInputViewTypeForButton:
             return _selectBtn;
+        case CKInputViewTypeForTextView:
+            return _borderTextView;
         default:
             break;
     }
@@ -579,6 +658,10 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         }
         case CKInputViewTypeForDownTF:{
             response = _narrowTF.textField.isFirstResponder;
+            break;
+        }
+        case CKInputViewTypeForTextView:{
+            response = _borderTextView.isFirstResponder;
             break;
         }
         default:
@@ -613,22 +696,26 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
 }
 
 #pragma mark - UIToolBarActions
-- (void)confirmActionEvent {
+- (IBAction)OK:(UIButton *)sender {
     if (_keyboardType == CKKeyboardTypeForDateTime) {
         NSDate *datePicker = [self.datePicker date];
         NSDateFormatter *pickerFormatter = [[NSDateFormatter alloc]init];
-        [pickerFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+        if (_isNeedSec) {
+            [pickerFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        }else {
+            [pickerFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+        }
         // 当前选中的日期时间
         NSString *dateStr = [pickerFormatter stringFromDate:datePicker];
-        if (self.inputViewSelectDateEventBlock) {
-            if (!self.inputViewSelectDateEventBlock(dateStr, self)) {
-                return;
-            }
+        if (self.inputViewSelectDateEventBlock && !self.inputViewSelectDateEventBlock(dateStr, self)) {
+            return;
         }
         if (_currentType == CKInputViewTypeForTextField && _borderTF) {
             _borderTF.text = dateStr;
         }else if (_currentType == CKInputViewTypeForDownTF && _narrowTF) {
             _narrowTF.textField.text = dateStr;
+        }else if (_currentType == CKInputViewTypeForTextView && _borderTextView) {
+            _borderTextView.text = dateStr;
         }
     }else if (_keyboardType == CKKeyboardTypeForNumeric) {
         if (self.numericSureUpdateBlock) {
@@ -639,7 +726,7 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     [self endEditing:true];
 }
 
-- (void)cancelActionEvent {
+- (IBAction)cancel:(UIButton *)sender {
     if (_keyboardType == CKKeyboardTypeForNumeric) {
         if (self.numericCancelUpdateBlock) {
             self.numericCancelUpdateBlock(self);
@@ -670,6 +757,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         case CKInputViewTypeForButton:
             _selectBtn.selected = [text isEqualToString:@"是"];
             return;
+        case CKInputViewTypeForTextView:
+            _borderTextView.text = text;
+            break;
         default:
             break;
     }
@@ -702,6 +792,12 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
             [self addDeleteBtnWithInputView:view];
         }
     }
+}
+
+#pragma mark - 设置title
+- (void)setTitle:(NSString *)title {
+    _title = title;
+    self.titleLabel.text = title;
 }
 
 #pragma mark - 添加deleteBtn
@@ -781,6 +877,8 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
             break;
         case CKInputViewTypeForButton:
             return _selectBtn.selected ? @"是" : @"否";
+        case CKInputViewTypeForTextView:
+            return _borderTextView.text;
         default:
             break;
     }
@@ -811,6 +909,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         case CKInputViewTypeForButton:
             view = _selectBtn;
             break;
+        case CKInputViewTypeForTextView:
+            view = _borderTextView;
+            break;
         default:
             break;
     }
@@ -818,11 +919,17 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         [view mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.right.bottom.equalTo(self);
             make.width.mas_equalTo(inputWidth);
+            if (_borderTextView && view == _borderTextView) {
+                make.height.mas_greaterThanOrEqualTo(30);
+            }
         }];
-        [self.titleLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
-        [self.titleLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
         [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.bottom.equalTo(self);
+            if (_borderTextView && view == _borderTextView) {
+                make.left.top.equalTo(self);
+                make.height.mas_equalTo(30);
+            }else {
+                make.left.top.bottom.equalTo(self);
+            }
             make.right.equalTo(view.mas_left).offset(-8);
         }];
     }
@@ -855,6 +962,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         case CKInputViewTypeForButton:
             view = _selectBtn;
             break;
+        case CKInputViewTypeForTextView:
+            view = _borderTextView;
+            break;
         default:
             break;
     }
@@ -869,12 +979,20 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
         }else {
             [view mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.right.bottom.equalTo(self);
+                if (_borderTextView && view == _borderTextView) {
+                    make.height.mas_greaterThanOrEqualTo(30);
+                }
             }];
             if (!self.titleLabel.superview) {
                 [self addSubview:self.titleLabel];
             }
             [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.top.bottom.equalTo(self);
+                if (_borderTextView && view == _borderTextView) {
+                    make.left.top.equalTo(self);
+                    make.height.mas_equalTo(30);
+                }else {
+                    make.left.top.bottom.equalTo(self);
+                }
                 make.width.mas_equalTo(titleWidth);
                 make.right.equalTo(view.mas_left).offset(-8);
             }];
@@ -898,23 +1016,9 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
 
 #pragma mark - prviate method
 - (UILabel *)createLabelWithTitle:(NSString *)title {
-    UILabel *lb = [CKUitls ck_createLabelWithTitle:title
-                                          withFont:16.0
-                                         withColor:@"#333333"];
+    UILabel *lb = [CKUitls ck_createLabelWithTitle:title withFont:16.0 withColor:@"#333333"];
     lb.textAlignment = NSTextAlignmentRight;
     return lb;
-}
-
-- (CKToolBar *)createToolBar {
-    CKToolBar *toolBar = [[CKToolBar alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
-    __weak typeof(self) weakSelf = self;
-    toolBar.cancelActionBlock = ^{
-        [weakSelf cancelActionEvent];
-    };
-    toolBar.confirmActionBlock = ^{
-        [weakSelf confirmActionEvent];
-    };
-    return toolBar;
 }
 
 #pragma mark - Lazy load
@@ -957,6 +1061,19 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     return _titleLabel;
 }
 
+- (UITextView *)borderTextView {
+    if (!_borderTextView) {
+        _borderTextView = [[UITextView alloc] init];
+        _borderTextView.font = [UIFont systemFontOfSize:16];
+        _borderTextView.textColor = [UIColor ck_colorWithHexString:@"000000"];
+        _borderTextView.layer.cornerRadius = 4;
+        _borderTextView.layer.masksToBounds = true;
+        _borderTextView.layer.borderColor = [UIColor ck_colorWithHexString:@"#d2d5e0"].CGColor;
+        _borderTextView.layer.borderWidth = 1/[UIScreen mainScreen].scale;
+    }
+    return _borderTextView;
+}
+
 - (UIDatePicker *)datePicker {
     if (!_datePicker) {
         _datePicker = [[UIDatePicker alloc]initWithFrame:CGRectMake(100, 100, 400, 300)];
@@ -971,7 +1088,7 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
 - (UIButton *)deleteBtn {
     if (!_deleteBtn) {
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteBtn setImage:[UIImage imageNamed:@"Sources.bundle/images/sc_03.png"] forState:UIControlStateNormal];
+        [_deleteBtn setImage:[UIImage imageNamed:@"sc_03"] forState:UIControlStateNormal];
         [_deleteBtn addTarget:self action:@selector(deleteBtnClickAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deleteBtn;
@@ -980,8 +1097,8 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
 - (CKLayoutButton *)selectBtn {
     if (!_selectBtn) {
         _selectBtn = [[CKLayoutButton alloc] init];
-        [_selectBtn setImage:[UIImage imageNamed:@"Sources.bundle/images/icon_changeTable_off.png"] forState:UIControlStateNormal];
-        [_selectBtn setImage:[UIImage imageNamed:@"Sources.bundle/images/icon_changeTable_on.png"] forState:UIControlStateSelected];
+        [_selectBtn setImage:[UIImage imageNamed:@"icon_changeTable_off"] forState:UIControlStateNormal];
+        [_selectBtn setImage:[UIImage imageNamed:@"icon_changeTable_on"] forState:UIControlStateSelected];
         [_selectBtn addTarget:self action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
         _selectBtn.imageSize = CGSizeMake(51.0/31.0*25.0, 25.0);
     }
