@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   # 名称
   s.name             = 'CKKit'
   # 版本
-  s.version          = '0.0.8'
+  s.version          = '0.0.9'
   # 摘要
   s.summary          = '组件化，经常用到的输入框类型的控件，造一个好用的轮子，方便复用，以及快速开发。'
   # 详情

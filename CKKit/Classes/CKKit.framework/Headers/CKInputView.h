@@ -87,6 +87,12 @@ typedef NS_ENUM(NSInteger, CKInputViewDeleteType) {
 /** 输入框为按钮时，点击按钮的block */
 @property (nonatomic, copy) void(^inputIsBtnClickBlock)(BOOL isSelect);
 
+/** 点击键盘上的确定按钮的block */
+@property (nonatomic, copy) void(^keyboardSureActionBlock)(void);
+
+/** 点检键盘上的取消按钮block */
+@property (nonatomic, copy) void(^keyboardCancelActionBlock)(void);
+
 /** 初始化 */
 - (instancetype)initWithTitle:(NSString *)title style:(CKInputViewType)style;
 

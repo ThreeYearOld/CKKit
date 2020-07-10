@@ -152,7 +152,7 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     self.inputView = view;
     if (type == CKInputViewTypeForTextField || type == CKInputViewTypeForDownTF || type == CKInputViewTypeForTextView) {
         // 在系统键盘上添加确认/取消按钮 - 仅仅是input是textField时，添加
-        UIToolbar *toolbar = [[[NSBundle mainBundle] loadNibNamed:@"HNToolBar" owner:self options:nil] firstObject];
+        CKToolBar *toolbar = [self createToolBar];
         if (_borderTF) {
             _borderTF.inputAccessoryView = toolbar;
         }
@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     self.textAlignment = _textAlignment;
     if (style == CKInputViewTypeForTextField || style == CKInputViewTypeForDownTF) {
         // 在系统键盘上添加确认/取消按钮 - 仅仅是input是textField时，添加
-        UIToolbar *toolbar = [[[NSBundle mainBundle] loadNibNamed:@"HNToolBar" owner:self options:nil] firstObject];
+        CKToolBar *toolbar = [self createToolBar];
         if (_borderTF) {
             _borderTF.inputAccessoryView = toolbar;
         }
@@ -688,6 +688,7 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
                         selectedImage:(NSString *)selectedImage
                            imageWidth:(CGFloat)imageWidth
                           imageHeight:(CGFloat)imageHeight {
+    
     if (_currentType == CKInputViewTypeForButton && _selectBtn) {
         [_selectBtn setImage:[UIImage imageNamed:normalImage] forState:UIControlStateNormal];
         [_selectBtn setImage:[UIImage imageNamed:selectedImage] forState:UIControlStateSelected];
@@ -696,7 +697,7 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
 }
 
 #pragma mark - UIToolBarActions
-- (IBAction)OK:(UIButton *)sender {
+- (void)confirmAction {
     if (_keyboardType == CKKeyboardTypeForDateTime) {
         NSDate *datePicker = [self.datePicker date];
         NSDateFormatter *pickerFormatter = [[NSDateFormatter alloc]init];
@@ -722,15 +723,21 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
             self.numericSureUpdateBlock(self);
         }
     }
+    if (self.keyboardSureActionBlock) {
+        self.keyboardSureActionBlock();
+    }
     // 结束编辑
     [self endEditing:true];
 }
 
-- (IBAction)cancel:(UIButton *)sender {
+- (void)cancelAction {
     if (_keyboardType == CKKeyboardTypeForNumeric) {
         if (self.numericCancelUpdateBlock) {
             self.numericCancelUpdateBlock(self);
         }
+    }
+    if (self.keyboardCancelActionBlock) {
+        self.keyboardCancelActionBlock();
     }
     // 结束编辑
     [self endEditing:true];
@@ -1019,6 +1026,18 @@ typedef NS_ENUM(NSInteger, CKInputViewWidthStatus) {
     UILabel *lb = [CKUitls ck_createLabelWithTitle:title withFont:16.0 withColor:@"#333333"];
     lb.textAlignment = NSTextAlignmentRight;
     return lb;
+}
+
+- (CKToolBar *)createToolBar {
+    CKToolBar *toolBar = [[CKToolBar alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
+    __weak typeof(self) weakSelf = self;
+    toolBar.confirmActionBlock = ^{
+        [weakSelf confirmAction];
+    };
+    toolBar.cancelActionBlock = ^{
+        [weakSelf cancelAction];
+    };
+    return toolBar;
 }
 
 #pragma mark - Lazy load
